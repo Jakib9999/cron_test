@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scs-cronjob-config
+data:
+  root: |
+    * * * * * /bin/echo  "Hi, today is $(date)" >> /home/a.txt
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: scs-schedule
+  name: scs-schedule
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scs-schedule
+  template:
+    metadata:
+      labels:
+        app: scs-schedule
+    spec:
+      containers:
+      - image: test
+        imagePullPolicy: Never
+        command: ["/bin/sh","-c"]
+        args: ["crontab  /etc/cron.d/cron/root && cron -f"]
+      
+        name: scs-schedule
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        
+        - name: crontab
+          mountPath: /etc/cron.d/cron
+        
+      volumes:
+      - name: crontab
+        configMap:
+          name: scs-cronjob-config
+          defaultMode: 0644
+
