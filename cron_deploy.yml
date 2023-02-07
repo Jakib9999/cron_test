@@ -26,7 +26,7 @@ spec:
       - image: test
         imagePullPolicy: Never
         command: ["/bin/sh","-c"]
-        args: ["crontab  /etc/cron.d/cron/root && cron -f"]
+        args: ["crontab  /tmp/cron/root && cron -f"]
       
         name: scs-schedule
         ports:
@@ -34,7 +34,7 @@ spec:
         volumeMounts:
         
         - name: crontab
-          mountPath: /etc/cron.d/cron
+          mountPath: /tmp/cron
         
       volumes:
       - name: crontab
