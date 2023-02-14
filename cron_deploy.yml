@@ -26,7 +26,7 @@ spec:
       - image: test
         imagePullPolicy: Never
         command: ["/bin/sh","-c"]
-        args: ["crontab  /tmp/cron/root && cron -f"]
+        args: ["crontab  /tmp/cron/* && cron -f"]
       
         name: scs-schedule
         ports:
